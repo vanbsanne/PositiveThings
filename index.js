@@ -33,6 +33,8 @@ function save() {
     // Save new list of days
     let json = JSON.stringify(days);
     localStorage.setItem(key, json);
+
+    buttonDisabled();
 }
 
 function checkDate() {
@@ -40,7 +42,7 @@ function checkDate() {
     listEmpty();
     let json = localStorage.getItem(key); //get json
     let list = JSON.parse(json); //make it a list again
-    let today = new Date().toLocaleString('nl-BE').split(' ')[0];
+    let today = new Date().toLocaleDateString('nl-BE');
 
     for (let i = 0; i < list.length; i++) {
         if (list[i].date == today) {
@@ -59,10 +61,11 @@ function listEmpty() {
     }
 }
 
-function buttonEnabled() {
-    if (checkDate() == true) {
-        document.getElementById('saveButton').disabled = true;
+function buttonDisabled() {
+    if (checkDate()) {
+        saveButton.disabled = true;
     }
 }
 
 saveButton.addEventListener('click', save);
+window.addEventListener('load', buttonDisabled);
