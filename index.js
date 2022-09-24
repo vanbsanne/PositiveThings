@@ -22,7 +22,7 @@ function save() {
         pos3: pos3,
     };
 
-    listEmpty();
+    ensureListExists();
 
     // Get previous days
     let days = JSON.parse(localStorage.getItem(key));
@@ -37,9 +37,9 @@ function save() {
     buttonDisabled();
 }
 
-function checkDate() {
+function isTodayFilledIn() {
     //check if date is filled
-    listEmpty();
+    ensureListExists();
     let json = localStorage.getItem(key); //get json
     let list = JSON.parse(json); //make it a list again
     let today = new Date().toLocaleDateString('nl-BE');
@@ -52,7 +52,7 @@ function checkDate() {
     return false;
 }
 
-function listEmpty() {
+function ensureListExists() {
     //Ensure list of previous days exists
     if (localStorage.getItem(key) == undefined) {
         let emptyList = [];
@@ -62,7 +62,7 @@ function listEmpty() {
 }
 
 function buttonDisabled() {
-    if (checkDate()) {
+    if (isTodayFilledIn()) {
         saveButton.disabled = true;
     }
 }
