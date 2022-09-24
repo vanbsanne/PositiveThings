@@ -6,6 +6,8 @@ var saveButton = document.querySelector('#saveButton');
 var forwardButton = document.querySelector('#forwardButton');
 var backButton = document.querySelector('#backButton');
 
+var daysList = loadDaysList();
+
 const key = 'days';
 
 function save() {
@@ -16,7 +18,7 @@ function save() {
 
     // Save them as a day
     let day = {
-        date: new Date().toLocaleString('nl-BE').split(' ')[0],
+        date: new Date().toLocaleDateString('nl-BE'),
         pos1: pos1,
         pos2: pos2,
         pos3: pos3,
@@ -25,13 +27,13 @@ function save() {
     ensureListExists();
 
     // Get previous days
-    let days = JSON.parse(localStorage.getItem(key));
+    loadDaysList();
 
     // Add new day to list of days
-    days.push(day);
+    daysList.push(day);
 
     // Save new list of days
-    let json = JSON.stringify(days);
+    let json = JSON.stringify(daysList);
     localStorage.setItem(key, json);
 
     buttonDisabled();
@@ -39,13 +41,11 @@ function save() {
 
 function isTodayFilledIn() {
     //check if date is filled
-    ensureListExists();
-    let json = localStorage.getItem(key); //get json
-    let list = JSON.parse(json); //make it a list again
+    loadDaysList();
     let today = new Date().toLocaleDateString('nl-BE');
 
-    for (let i = 0; i < list.length; i++) {
-        if (list[i].date == today) {
+    for (let i = 0; i < daysList.length; i++) {
+        if (daysList[i].date == today) {
             return true;
         }
     }
@@ -65,6 +65,11 @@ function buttonDisabled() {
     if (isTodayFilledIn()) {
         saveButton.disabled = true;
     }
+}
+
+function loadDaysList(){
+    ensureListExists();
+    daysList = JSON.parse(localStorage.getItem(key));
 }
 
 saveButton.addEventListener('click', save);
