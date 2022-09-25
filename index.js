@@ -6,11 +6,11 @@ var saveButton = document.querySelector('#saveButton');
 var forwardButton = document.querySelector('#forwardButton');
 var backButton = document.querySelector('#backButton');
 
+const key = 'days';
+
 var daysList = loadDaysList();
 
 var currentDay = 0;
-
-const key = 'days';
 
 function save() {
     // Get positives fromtext inputs
@@ -20,7 +20,7 @@ function save() {
 
     // Save them as a day
     let day = {
-        date: new Date().toLocaleDateString('nl-BE'),
+        date: new Date().toISOString(),
         pos1: pos1,
         pos2: pos2,
         pos3: pos3,
@@ -44,7 +44,7 @@ function save() {
 function isTodayFilledIn() {
     //check if date is filled
     loadDaysList();
-    let today = new Date().toLocaleDateString('nl-BE');
+    let today = new Date().toISOString();
 
     for (let i = 0; i < daysList.length; i++) {
         if (daysList[i].date == today) {
@@ -71,45 +71,51 @@ function buttonDisabled() {
     forwardButton.disabled = true;
 }
 
-function loadDaysList(){
+function loadDaysList() {
     ensureListExists();
     daysList = JSON.parse(localStorage.getItem(key));
 }
 
-function goBack(){
+function goBack() {
     var earliestDateString = daysList[0].date;
     var earliestDate = new Date(earliestDateString);
     let newDate = new Date();
-    newDate.setDate(newDate.getDate() + currentDay);
+    newDate = new Date(newDate.setDate(newDate.getDate() + (currentDay - 1)));
 
-    if(daysList.length > 0){
-        if(earliestDate <= newDate){
+    if (daysList.length > 0) {
+        if (newDate >= earliestDate) {
+            console.log('a');
             currentDay--;
             backButton.disabled = false;
-        } else{
+            loadCurrentDate();
+        } else {
+            console.log('b');
             backButton.disabled = true;
         }
     }
 }
 
-function loadCurrentDate(){
-    let newDate = new Date();
-    newDate.setDate(newDate.getDate() + currentDay);
-
+function loadCurrentDate() {
     // get date we want to view
-    let newDateString = newDate.toLocaleDateString('nl-BE');
+    let newDate = new Date();
+    newDate = new Date(newDate.setDate(newDate.getDate() + currentDay));
 
     // get that day from the list
-    var day = daysList.filter(day => compareDates(day.date,newDateString))[0];
+    var day = daysList.filter((day) =>
+        compareDates(new Date(day.date), newDate)
+    )[0];
+
+    console.log('day');
 
     positive1.value = day.pos1;
     positive2.value = day.pos2;
     positive3.value = day.pos3;
-
 }
 
-function compareDates(a,b){
-    return a == b;
+function compareDates(dateA, dateB) {
+    return (
+        dateA.toLocaleDateString('nl-BE') == dateB.toLocaleDateString('nl-BE')
+    );
 }
 
 //function goForward(){
