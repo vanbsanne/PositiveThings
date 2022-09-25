@@ -8,6 +8,8 @@ var backButton = document.querySelector('#backButton');
 
 var daysList = loadDaysList();
 
+var currentDay = 0;
+
 const key = 'days';
 
 function save() {
@@ -65,6 +67,8 @@ function buttonDisabled() {
     if (isTodayFilledIn()) {
         saveButton.disabled = true;
     }
+
+    forwardButton.disabled = true;
 }
 
 function loadDaysList(){
@@ -72,5 +76,46 @@ function loadDaysList(){
     daysList = JSON.parse(localStorage.getItem(key));
 }
 
+function goBack(){
+    var earliestDateString = daysList[0].date;
+    var earliestDate = new Date(earliestDateString);
+    let newDate = new Date();
+    newDate.setDate(newDate.getDate() + currentDay);
+
+    if(daysList.length > 0){
+        if(earliestDate <= newDate){
+            currentDay--;
+            backButton.disabled = false;
+        } else{
+            backButton.disabled = true;
+        }
+    }
+}
+
+function loadCurrentDate(){
+    let newDate = new Date();
+    newDate.setDate(newDate.getDate() + currentDay);
+
+    // get date we want to view
+    let newDateString = newDate.toLocaleDateString('nl-BE');
+
+    // get that day from the list
+    var day = daysList.filter(day => compareDates(day.date,newDateString))[0];
+
+    positive1.value = day.pos1;
+    positive2.value = day.pos2;
+    positive3.value = day.pos3;
+
+}
+
+function compareDates(a,b){
+    return a == b;
+}
+
+//function goForward(){
+//    currentDay++;
+//}
+
 saveButton.addEventListener('click', save);
+backButton.addEventListener('click', goBack);
 window.addEventListener('load', buttonDisabled);
