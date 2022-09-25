@@ -38,7 +38,7 @@ function save() {
     let json = JSON.stringify(daysList);
     localStorage.setItem(key, json);
 
-    buttonDisabled();
+    saveButtonDisabled();
 }
 
 function isTodayFilledIn() {
@@ -64,18 +64,13 @@ function ensureListExists() {
     }
 }
 
-function buttonDisabled() {
+function saveButtonDisabled() {
     if (isTodayFilledIn()) {
         saveButton.disabled = true;
     }
 }
 
-function loadDaysList() {
-    ensureListExists();
-    daysList = JSON.parse(localStorage.getItem(key));
-}
-
-function goBack() {
+function backButtonDisabled(){
     var earliestDateString = daysList[0].date;
     var earliestDate = new Date(earliestDateString);
     let newDate = new Date();
@@ -83,16 +78,14 @@ function goBack() {
 
     if (daysList.length > 0) {
         if (newDate >= earliestDate) {
-            currentDay--;
             backButton.disabled = false;
-            loadCurrentDate();
         } else {
             backButton.disabled = true;
         }
     }
 }
 
-function goForward() {
+function forwardButtonDisabled(){
     var furthestDateString = daysList[daysList.length - 1].date;
     var furthestDate = new Date(furthestDateString);
     console.log('furthestDate', furthestDate);
@@ -102,15 +95,32 @@ function goForward() {
     console.log('newDate', newDate);
     if (daysList.length > 0) {
         if (newDate <= furthestDate) {
-            console.log('a');
-            currentDay++;
             forwardButton.disabled = false;
-            loadCurrentDate();
         } else {
-            console.log('b');
             forwardButton.disabled = true;
         }
     }
+}
+
+function loadDaysList() {
+    ensureListExists();
+    daysList = JSON.parse(localStorage.getItem(key));
+}
+
+function goBack() {
+    currentDay--;
+    loadCurrentDate();
+}
+
+function goForward() {
+    currentDay++;
+    loadCurrentDate();
+}
+
+function buttonsDisabled(){
+    saveButtonDisabled();
+    forwardButtonDisabled();
+    backButtonDisabled();
 }
 
 function loadCurrentDate() {
@@ -137,4 +147,5 @@ function compareDates(dateA, dateB) {
 saveButton.addEventListener('click', save);
 backButton.addEventListener('click', goBack);
 forwardButton.addEventListener('click', goForward);
-window.addEventListener('load', buttonDisabled);
+window.addEventListener('load', saveButtonDisabled);
+document.addEventListener('click', buttonsDisabled);
