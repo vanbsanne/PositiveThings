@@ -44,10 +44,11 @@ function save() {
 function isTodayFilledIn() {
     //check if date is filled
     loadDaysList();
-    let today = new Date().toISOString();
+    let today = new Date().toLocaleDateString('nl-BE');
 
     for (let i = 0; i < daysList.length; i++) {
-        if (daysList[i].date == today) {
+        let date = new Date(daysList[i].date).toLocaleDateString('nl-BE');
+        if (date == today) {
             return true;
         }
     }
@@ -67,8 +68,6 @@ function buttonDisabled() {
     if (isTodayFilledIn()) {
         saveButton.disabled = true;
     }
-
-    forwardButton.disabled = true;
 }
 
 function loadDaysList() {
@@ -84,13 +83,32 @@ function goBack() {
 
     if (daysList.length > 0) {
         if (newDate >= earliestDate) {
-            console.log('a');
             currentDay--;
             backButton.disabled = false;
             loadCurrentDate();
         } else {
-            console.log('b');
             backButton.disabled = true;
+        }
+    }
+}
+
+function goForward() {
+    var furthestDateString = daysList[daysList.length - 1].date;
+    var furthestDate = new Date(furthestDateString);
+    console.log('furthestDate', furthestDate);
+    let newDate = new Date();
+    newDate = new Date(newDate.setDate(newDate.getDate() + (currentDay + 1)));
+
+    console.log('newDate', newDate);
+    if (daysList.length > 0) {
+        if (newDate <= furthestDate) {
+            console.log('a');
+            currentDay++;
+            forwardButton.disabled = false;
+            loadCurrentDate();
+        } else {
+            console.log('b');
+            forwardButton.disabled = true;
         }
     }
 }
@@ -105,8 +123,6 @@ function loadCurrentDate() {
         compareDates(new Date(day.date), newDate)
     )[0];
 
-    console.log('day');
-
     positive1.value = day.pos1;
     positive2.value = day.pos2;
     positive3.value = day.pos3;
@@ -118,10 +134,7 @@ function compareDates(dateA, dateB) {
     );
 }
 
-//function goForward(){
-//    currentDay++;
-//}
-
 saveButton.addEventListener('click', save);
 backButton.addEventListener('click', goBack);
+forwardButton.addEventListener('click', goForward);
 window.addEventListener('load', buttonDisabled);
