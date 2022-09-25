@@ -67,6 +67,10 @@ function ensureListExists() {
     }
 }
 
+function isListEmpty() {
+    return daysList.length == 0;
+}
+
 function saveButtonDisabled() {
     if (isTodayFilledIn()) {
         saveButton.disabled = true;
@@ -74,6 +78,11 @@ function saveButtonDisabled() {
 }
 
 function backButtonDisabled() {
+    if (isListEmpty()) {
+        backButton.disabled = true;
+        return;
+    }
+
     // get earliest date from list
     var earliestDateString = daysList[0].date;
     var earliestDate = new Date(earliestDateString);
@@ -94,6 +103,11 @@ function backButtonDisabled() {
 }
 
 function forwardButtonDisabled() {
+    if (isListEmpty()) {
+        forwardButton.disabled = true;
+        return;
+    }
+
     // get furthest date from list
     var furthestDateString = daysList[daysList.length - 1].date;
     var furthestDate = new Date(furthestDateString);
@@ -135,6 +149,10 @@ function buttonsDisabled() {
 }
 
 function loadCurrentDate() {
+    if (isListEmpty()) {
+        return;
+    }
+
     // get date we want to view
     let newDate = new Date();
     newDate = new Date(newDate.setDate(newDate.getDate() + currentDay));
