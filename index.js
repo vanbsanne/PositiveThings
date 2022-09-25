@@ -6,6 +6,7 @@ var saveButton = document.querySelector('#saveButton');
 var forwardButton = document.querySelector('#forwardButton');
 var backButton = document.querySelector('#backButton');
 
+// const we use to retrieve our list of days
 const key = 'days';
 
 var daysList = loadDaysList();
@@ -42,10 +43,12 @@ function save() {
 }
 
 function isTodayFilledIn() {
-    //check if date is filled
     loadDaysList();
+
+    // Get todays date
     let today = new Date().toLocaleDateString('nl-BE');
 
+    //check if today's date is filled
     for (let i = 0; i < daysList.length; i++) {
         let date = new Date(daysList[i].date).toLocaleDateString('nl-BE');
         if (date == today) {
@@ -70,11 +73,16 @@ function saveButtonDisabled() {
     }
 }
 
-function backButtonDisabled(){
+function backButtonDisabled() {
+    // get earliest date from list
     var earliestDateString = daysList[0].date;
     var earliestDate = new Date(earliestDateString);
+    earliestDate.setHours(0, 0, 0, 0); // set hours to 0 to compare only the date
+
+    // get date we would go to if we pressed button
     let newDate = new Date();
-    newDate = new Date(newDate.setDate(newDate.getDate() + (currentDay - 1)));
+    newDate.setDate(newDate.getDate() + (currentDay - 1));
+    newDate.setHours(0, 0, 0, 0); // set hours to 0 to compare only the date
 
     if (daysList.length > 0) {
         if (newDate >= earliestDate) {
@@ -85,14 +93,17 @@ function backButtonDisabled(){
     }
 }
 
-function forwardButtonDisabled(){
+function forwardButtonDisabled() {
+    // get furthest date from list
     var furthestDateString = daysList[daysList.length - 1].date;
     var furthestDate = new Date(furthestDateString);
-    console.log('furthestDate', furthestDate);
-    let newDate = new Date();
-    newDate = new Date(newDate.setDate(newDate.getDate() + (currentDay + 1)));
+    furthestDate.setHours(0, 0, 0, 0); // set hours to 0 to compare only the date
 
-    console.log('newDate', newDate);
+    // get date we would go to if we pressed button
+    let newDate = new Date();
+    newDate.setDate(newDate.getDate() + (currentDay + 1));
+    newDate.setHours(0, 0, 0, 0); // set hours to 0 to compare only the date
+
     if (daysList.length > 0) {
         if (newDate <= furthestDate) {
             forwardButton.disabled = false;
@@ -117,7 +128,7 @@ function goForward() {
     loadCurrentDate();
 }
 
-function buttonsDisabled(){
+function buttonsDisabled() {
     saveButtonDisabled();
     forwardButtonDisabled();
     backButtonDisabled();
@@ -147,5 +158,5 @@ function compareDates(dateA, dateB) {
 saveButton.addEventListener('click', save);
 backButton.addEventListener('click', goBack);
 forwardButton.addEventListener('click', goForward);
-window.addEventListener('load', saveButtonDisabled);
+window.addEventListener('load', buttonsDisabled);
 document.addEventListener('click', buttonsDisabled);
