@@ -169,7 +169,7 @@ function loadCurrentDate() {
         compareDates(new Date(day.date), dateToShow)
     )[0];
 
-    if (dateToShow = today) {
+    if (dateToShow == today) {
         titleDate.innerText = "Today";
     }
     else if (dateToShow == yesterday) {
