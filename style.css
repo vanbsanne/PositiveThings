@@ -9,6 +9,8 @@ h1 {
 	color: #ddd;
 	text-align: center;
 	font-size: 1.3em;
+	margin-top: 20px;
+	margin-bottom: 0;
 }
 
 #titleDate {
@@ -39,6 +41,7 @@ input[type="text"] {
 	margin: 7px 15px;
 	flex-grow: 1;
 	border-radius: 5px;
+	min-width: 10px;
 }
 
 input[type=text]:focus {
@@ -49,10 +52,15 @@ button {
 	background-color: #163;
 	border: 0px solid #575;
 	padding: 15px 20px;
-	margin: 10px;
+	margin-top: 10px;
+	margin-right: 10px;
 	border-radius: 3px;
 	font-weight: bold;
 	color:  #ddd;
+}
+
+button:last-child {
+	margin-right: 0px;
 }
 
 button:disabled {
@@ -61,6 +69,15 @@ button:disabled {
 
 #buttons {
 	padding-top: 20px;
-	margin: 0 auto;
-	width:  50%;
+	width: 100%;
+	text-align: center;
+}
+
+#leavesWrapper {
+	width: 100%;
+	text-align: center;
+}
+
+#leavesLeft {
+	transform: scaleX(-1);
 }
