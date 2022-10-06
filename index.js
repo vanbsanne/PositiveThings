@@ -11,9 +11,12 @@ var backButton = document.querySelector('#backButton');
 // const we use to retrieve our list of days
 const key = 'days';
 
-var daysList = loadDaysList();
-
 var currentDay = 0;
+
+var sec = 1000;
+var min = 60 * sec;
+var hour = 60 * min;
+
 
 function save() {
     // Get positives fromtext inputs
@@ -169,19 +172,26 @@ function loadCurrentDate() {
         compareDates(new Date(day.date), dateToShow)
     )[0];
 
-    if (dateToShow == today) {
+    if (dateToShow.getTime() == today.getTime()) {
         titleDate.innerText = "Today";
     }
-    else if (dateToShow == yesterday) {
+    else if (dateToShow.getTime() == yesterday.getTime()) {
         titleDate.innerText = "Yesterday";
     }
     else {
         titleDate.innerText = formatDate(dateToShow);
     }
 
-    positive1.value = day.pos1;
-    positive2.value = day.pos2;
-    positive3.value = day.pos3;
+    if (day != undefined) {
+        positive1.value = day.pos1;
+        positive2.value = day.pos2;
+        positive3.value = day.pos3;
+    }
+    else {
+        positive1.value = "";
+        positive2.value = "";
+        positive3.value = "";
+    }
 }
 
 function compareDates(dateA, dateB) {
@@ -199,8 +209,50 @@ function formatDate(date) {
 }
 
 
+function showNotification() {
+    let notification = new Notification("Positive Things!");
+    notification.onclick = () => {
+        currentDay = 0;
+        loadCurrentDate();
+    }
+}
+
+
+// because we need to correct for time drift, long period between activity, etc
+// we set successive timers for half the duration, until less than 5 min is left.
+// At that point we assume the timer to be accurate enough to fire at the 5 min mark.
+function setNotificationTimeout() {
+    let targetDate = new Date();
+    targetDate.setHours(0, 0, 0, 0);
+
+    let todayValue = daysList.filter((x) => {
+        let date = new Date(x.date);
+        date.setHours(0, 0, 0, 0);
+        return date.getTime() ==  targetDate.getTime();
+    })[0];
+
+    if (todayValue != undefined || (new Date().getHours() >= 20 && new Date().getMinutes() > 30)) {
+        targetDate.setDate(targetDate.getDate() + 1);
+    }
+
+    targetDate.setHours(20, 0, 0, 0);
+
+    let timeDiff = targetDate - new Date();
+
+    if (timeDiff < 5 * min) {
+        setTimeout(showNotification, timeDiff);
+        return;
+    }
+    else {
+        setTimeout(setNotificationTimeout, timeDiff / 2);
+    }
+}
+
+loadDaysList();
+
 saveButton.addEventListener('click', save);
 backButton.addEventListener('click', goBack);
 forwardButton.addEventListener('click', goForward);
 window.addEventListener('load', buttonsDisabled);
+window.addEventListener('load', setNotificationTimeout);
 document.addEventListener('click', buttonsDisabled);
