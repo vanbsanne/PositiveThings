@@ -1,3 +1,5 @@
+var titleDate = document.getElementById("titleDate");
+
 var positive1 = document.querySelector('#input1');
 var positive2 = document.querySelector('#input2');
 var positive3 = document.querySelector('#input3');
@@ -109,8 +111,7 @@ function forwardButtonDisabled() {
     }
 
     // get furthest date from list
-    var furthestDateString = daysList[daysList.length - 1].date;
-    var furthestDate = new Date(furthestDateString);
+    var furthestDate = new Date();
     furthestDate.setHours(0, 0, 0, 0); // set hours to 0 to compare only the date
 
     // get date we would go to if we pressed button
@@ -154,13 +155,29 @@ function loadCurrentDate() {
     }
 
     // get date we want to view
-    let newDate = new Date();
-    newDate = new Date(newDate.setDate(newDate.getDate() + currentDay));
+    let dateToShow = new Date();
+    dateToShow.setDate(dateToShow.getDate() + currentDay);
+    dateToShow.setHours(0, 0, 0, 0);
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setHours(0, 0, 0, 0);
 
     // get that day from the list
     var day = daysList.filter((day) =>
-        compareDates(new Date(day.date), newDate)
+        compareDates(new Date(day.date), dateToShow)
     )[0];
+
+    if (dateToShow = today) {
+        titleDate.innerText = "Today";
+    }
+    else if (dateToShow == yesterday) {
+        titleDate.innerText = "Yesterday";
+    }
+    else {
+        titleDate.innerText = formatDate(dateToShow);
+    }
 
     positive1.value = day.pos1;
     positive2.value = day.pos2;
@@ -172,6 +189,15 @@ function compareDates(dateA, dateB) {
         dateA.toLocaleDateString('nl-BE') == dateB.toLocaleDateString('nl-BE')
     );
 }
+
+function formatDate(date) {
+    return date.toLocaleString('en-GB', {
+        month: 'long', // "June"
+        day: 'numeric', // "01"
+        year: 'numeric' // "2019"
+      });
+}
+
 
 saveButton.addEventListener('click', save);
 backButton.addEventListener('click', goBack);
