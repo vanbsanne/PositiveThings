@@ -1,0 +1,66 @@
+body {
+	background-color: #000;
+	color: #163;
+	font-family: Roboto;
+	font-size: 25px;
+}
+
+h1 {
+	color: #ddd;
+	text-align: center;
+	font-size: 1.3em;
+}
+
+#titleDate {
+	color: #163;
+
+}
+
+.positives {
+	display: flex;
+	flex-direction: row;
+	align-items: end;
+}
+
+label {
+	width: 50px;
+	text-align: center;
+	color: #ddd;
+	font-size: 1.2em;
+}
+
+input[type="text"] {
+	background-color: #000;
+	border: none !important;
+	border-bottom: 3px solid #555 !important;
+	color: #ddd;
+	font-size: 1em;
+	padding: 10px;
+	margin: 7px 15px;
+	flex-grow: 1;
+	border-radius: 5px;
+}
+
+input[type=text]:focus {
+	outline: none;
+}
+
+button {
+	background-color: #163;
+	border: 0px solid #575;
+	padding: 15px 20px;
+	margin: 10px;
+	border-radius: 3px;
+	font-weight: bold;
+	color:  #ddd;
+}
+
+button:disabled {
+	color: #333;
+}
+
+#buttons {
+	padding-top: 20px;
+	margin: 0 auto;
+	width:  50%;
+}
