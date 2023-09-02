@@ -23,10 +23,13 @@ function save() {
     let pos1 = positive1.value;
     let pos2 = positive2.value;
     let pos3 = positive3.value;
+    let today = new Date();
+    today.setDate(today.getDate()+currentDay);
+    let currentDate = today.toISOString();
 
     // Save them as a day
     let day = {
-        date: new Date().toISOString(),
+        date: currentDate,
         pos1: pos1,
         pos2: pos2,
         pos3: pos3,
@@ -51,7 +54,9 @@ function isCurrentDateFilledIn() {
     loadDaysList();
 
     // Get currentDates date
-    let currentDate = new Date().toLocaleDateString('nl-BE');
+    let today = new Date();
+    today.setDate(today.getDate()+currentDay);
+    let currentDate = today.toLocaleDateString('nl-BE');
 
     //check if currentDate's date is filled
     for (let i = 0; i < daysList.length; i++) {
@@ -79,6 +84,8 @@ function isListEmpty() {
 function saveButtonDisabled() {
     if (isCurrentDateFilledIn()) {
         saveButton.disabled = true;
+    } else{
+        saveButton.disabled = false;
     }
 }
 
@@ -149,13 +156,13 @@ function goForward() {
 function buttonsDisabled() {
     saveButtonDisabled();
     forwardButtonDisabled();
-    backButtonDisabled();
+    //backButtonDisabled();
 }
 
 function loadCurrentDate() {
-    if (isListEmpty()) {
-        return;
-    }
+    // if (isListEmpty()) {
+    //     return;
+    // }
 
     // get date we want to view
     let dateToShow = new Date();
