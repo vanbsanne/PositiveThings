@@ -125,12 +125,10 @@ function forwardButtonDisabled() {
     newDate.setDate(newDate.getDate() + (currentDay + 1));
     newDate.setHours(0, 0, 0, 0); // set hours to 0 to compare only the date
 
-    if (daysList.length > 0) {
-        if (newDate <= furthestDate) {
-            forwardButton.disabled = false;
-        } else {
-            forwardButton.disabled = true;
-        }
+    if (newDate <= furthestDate) {
+        forwardButton.disabled = false;
+    } else {
+        forwardButton.disabled = true;
     }
 }
 
