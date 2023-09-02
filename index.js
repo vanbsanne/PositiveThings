@@ -115,10 +115,6 @@ function saveButtonDisabled() {
 // }
 
 function forwardButtonDisabled() {
-    if (isListEmpty()) {
-        forwardButton.disabled = true;
-        return;
-    }
 
     // get furthest date from list
     var furthestDate = new Date();
