@@ -89,31 +89,6 @@ function saveButtonDisabled() {
     }
 }
 
-// function backButtonDisabled() {
-//     if (isListEmpty()) {
-//         backButton.disabled = true;
-//         return;
-//     }
-
-//     // get earliest date from list
-//     var earliestDateString = daysList[0].date;
-//     var earliestDate = new Date(earliestDateString);
-//     earliestDate.setHours(0, 0, 0, 0); // set hours to 0 to compare only the date
-
-//     // get date we would go to if we pressed button
-//     let newDate = new Date();
-//     newDate.setDate(newDate.getDate() + (currentDay - 1));
-//     newDate.setHours(0, 0, 0, 0); // set hours to 0 to compare only the date
-
-//     if (daysList.length > 0) {
-//         if (newDate >= earliestDate) {
-//             backButton.disabled = false;
-//         } else {
-//             backButton.disabled = true;
-//         }
-//     }
-// }
-
 function forwardButtonDisabled() {
 
     // get furthest date from list
@@ -150,14 +125,9 @@ function goForward() {
 function buttonsDisabled() {
     saveButtonDisabled();
     forwardButtonDisabled();
-    //backButtonDisabled();
 }
 
 function loadCurrentDate() {
-    // if (isListEmpty()) {
-    //     return;
-    // }
-
     // get date we want to view
     let dateToShow = new Date();
     dateToShow.setDate(dateToShow.getDate() + currentDay);
